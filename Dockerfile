@@ -1,17 +1,23 @@
-FROM python:3.9
+FROM node:latest
 
-LABEL maintainer="JamariusTaylor"
+LABEL Maintainer="JamariusTaylor"
 
-WORKDIR /main
+RUN mkdir /site
 
-COPY requirements.txt /main/requirements.txt
+COPY package.json /site
 
-RUN mkdir app
+COPY assets /site/assets
 
-WORKDIR /app
+COPY blogs /site/blogs
 
-COPY app.py /app
+COPY index.js /site
 
-RUN pip install --no-cache-dir --upgrade -r /main/requirements.txt
+COPY main.html /site
 
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080"]
+WORKDIR /site
+
+EXPOSE 8080/tcp
+
+RUN npm install 
+
+CMD [ "node", "index.js" ]
